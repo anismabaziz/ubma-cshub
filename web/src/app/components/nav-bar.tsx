@@ -9,9 +9,7 @@ import DarkMode from "./dark-mode";
 export default function Navbar() {
   const [navOpen, setNavOpen] = useState(false);
   return (
-    <div
-      className={`sticky top-0 z-10 h-16 w-full border-b bg-transparent backdrop-blur-lg`}
-    >
+    <div className="sticky top-0 h-16 w-full border-b bg-transparent backdrop-blur-lg">
       <div className="container mx-auto flex h-full items-center justify-between px-8">
         <Link href={"/home"} className="">
           <TypographyH1>Ubma-Cshub</TypographyH1>
@@ -62,15 +60,17 @@ interface MobileNavProps {
 }
 function MobileNav({ navOpen, setNavOpen }: MobileNavProps) {
   return (
-    <>
+    <div
+      className={`absolute left-0 top-0 h-[100vh] w-full overflow-x-hidden bg-transparent ${navOpen ? "" : "pointer-events-none opacity-0"} transition-opacity`}
+    >
       <div
         className={`absolute left-0 top-0 h-screen w-full cursor-pointer bg-black opacity-20 dark:bg-white md:hidden ${
-          navOpen ? "block" : "hidden"
+          navOpen ? "" : "hidden"
         }`}
         onClick={() => setNavOpen(false)}
       ></div>
       <div
-        className={`absolute right-0 top-0 flex h-screen w-1/2 flex-col gap-10 bg-white px-8 py-4 transition-transform dark:bg-black md:hidden ${
+        className={`absolute right-0 top-0 flex h-screen w-1/2 flex-col gap-10 bg-white px-8 py-4 transition-transform dark:bg-black ${
           navOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -94,11 +94,11 @@ function MobileNav({ navOpen, setNavOpen }: MobileNavProps) {
             Contact
           </Link>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col items-start gap-3">
           <Button variant={"outline"}>Contribute</Button>
           <DarkMode />
         </div>
       </div>
-    </>
+    </div>
   );
 }
