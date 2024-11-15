@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  STUDENT
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  username  String   @unique
+  password  String
+  role      UserRole
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum DegreeType {
+  BACHELOR
+  MASTERS
+}
+
+model Degree {
+  id        String     @id @default(uuid())
+  name      DegreeType
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  years     Year[]
+}
+
+model Year {
+  id         String     @id @default(uuid())
+  yearNumber Int
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  degree     Degree?    @relation(fields: [degreeId], references: [id])
+  degreeId   String?
+  semesters  Semester[]
+}
+
+model Semester {
+  id             String   @id @default(uuid())
+  semesterNumber Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  year           Year?    @relation(fields: [yearId], references: [id])
+  yearId         String?
+  modules        Module[]
+}
+
+model Module {
+  id          String     @id @default(uuid())
+  name        String
+  code        String
+  description String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Semester    Semester?  @relation(fields: [semesterId], references: [id])
+  semesterId  String?
+  resources   Resource[]
+}
+
+enum ResourceType {
+  BOOK
+  DRIVE
+  YOUTUBE
+}
+
+model Resource {
+  id           String       @id @default(uuid())
+  resourceType ResourceType
+  url          String
+  description  String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  Module       Module?      @relation(fields: [moduleId], references: [id])
+  moduleId     String?
+}
