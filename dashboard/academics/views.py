@@ -1,4 +1,5 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+import uuid
 from .models import Degree, Major, Year, Semester, Module, Resource
 from .serializers import (
     DegreeSerializer,
@@ -38,6 +39,14 @@ class ModuleViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["get"], url_path="by-semester/(?P<semester>[^/.]+)")
     def by_semester(self, request, semester=None):
+        try:
+            uuid.UUID(str(semester))
+        except ValueError:
+            return Response(
+                {"error": "Invalid semester ID format"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         modules = self.queryset.filter(semester=semester)
         serializer = self.get_serializer(modules, many=True)
         return Response(serializer.data)
@@ -46,3 +55,9 @@ class ModuleViewSet(viewsets.ModelViewSet):
 class ResourceViewSet(viewsets.ModelViewSet):
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
+
+    @action(detail=False, methods=["get"], url_path="by-module/(?P<module>[^/.]+)")
+    def by_module(self, request, module=None):
+        resources = self.queryset.filter(module=module)
+        serializer = self.get_serializer(resources, many=True)
+        return Response(serializer.data)
