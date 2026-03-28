@@ -1,44 +1,49 @@
-# CSHub - Computer Science Hub for Students
+# Ubma Cshub
 
-CSHub is a comprehensive platform designed for computer science students at our university. It provides resources like Google Drive links, YouTube videos, and books for different modules across bachelor's and master's programs. The website also features an admin dashboard for managing content efficiently.
-
-## Features
-
-- **User Access**:
-
-  - Students can browse and access resources for their selected year and semester without authentication.
-  - Admins can manage the content via a secure dashboard.
-
-- **Organized Resources**:
-
-  - Structured by degree type (bachelor's or master's), year, semester, and module.
-
-- **Admin Dashboard**:
-  - Full CRUD functionality to manage resources and module information.
+Ubma Cshub is a dedicated academic resource platform for Computer Science students. It centralizes access to essential learning materials, including lecture notes, textbooks, and recorded sessions, organized by major, year, and semester.
 
 ## Tech Stack
 
-### Frontend
+- **Frontend**: Next.js 15+, Tailwind CSS, Shadcn/UI, Axios.
+- **Backend**: Django (Django REST Framework) managed with `uv`.
+- **Database**: SQLite (Development) / PostgreSQL (Production).
 
-- **Framework**: [Next.js](https://nextjs.org/)
-- **Styling**: [Shadcn UI](https://ui.shadcn.dev/), [Tailwind CSS](https://tailwindcss.com/)
-- **State Management**: (if applicable, e.g., Redux, Zustand, etc.)
-
-### Backend
-
-- **Framework**: [Express.js](https://expressjs.com/)
-- **Database**: [Supabase](https://supabase.io/)
-- **Authentication**: JSON Web Tokens (JWT) for admin authentication
-
-### Deployment
-
-- **Frontend**: Deployed on [Vercel](https://vercel.com/)
-- **Backend**: Hosted on [Render](https://render.com/)
-- **Database**: Hosted on [Supabase](https://supabase.io/)
-
-## Installation
+## Getting Started
 
 ### Prerequisites
 
-- Node.js
-- PostgreSQL
+- [Node.js](https://nodejs.org/) (v18+)
+- [Python](https://www.python.org/) (v3.12+)
+- [uv](https://github.com/astral-sh/uv) (for backend dependency management)
+
+### Local Setup
+
+#### 1. Backend (Django)
+
+Navigate to the `dashboard` directory and set up the environment:
+
+```bash
+cd dashboard
+uv sync
+uv run python manage.py migrate
+uv run python manage.py runserver
+```
+
+The backend API will be available at `http://localhost:8000/`.
+
+#### 2. Frontend (Next.js)
+
+Navigate to the `web` directory and install dependencies:
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+The frontend application will be available at `http://localhost:3000/`.
+
+## Project Structure
+
+- `/web`: Next.js frontend application.
+- `/dashboard`: Django backend API and admin dashboard.

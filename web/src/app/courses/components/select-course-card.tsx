@@ -18,7 +18,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Major, Semester, Year } from "@/types/db";
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface SelectCourseCardProps {
   majors: Major[];
@@ -40,6 +40,24 @@ export default function SelectCourseCard({
   const [selectedSemester, setSelectedSemester] = useState<string | undefined>(
     undefined
   );
+  const router = useRouter();
+
+  const handleMajorChange = (value: string) => {
+    setSelectedMajor(value);
+    setSelectedYear(undefined);
+    setSelectedSemester(undefined);
+  };
+
+  const handleYearChange = (value: string) => {
+    setSelectedYear(value);
+    setSelectedSemester(undefined);
+  };
+
+  const handleContinue = () => {
+    if (selectedSemester) {
+      router.push(`/courses/modules/${selectedSemester}`);
+    }
+  };
 
   const yearsFiltered = years.filter((year) => year.major.id === selectedMajor);
   const semestersFiltered = semesters.filter(
@@ -60,7 +78,7 @@ export default function SelectCourseCard({
           <Label htmlFor="major">Major</Label>
           <Select
             value={selectedMajor}
-            onValueChange={(value) => setSelectedMajor(value)}
+            onValueChange={handleMajorChange}
           >
             <SelectTrigger id="major">
               <SelectValue placeholder="Select your major" />
@@ -79,7 +97,7 @@ export default function SelectCourseCard({
           <Label htmlFor="year">Year</Label>
           <Select
             value={selectedYear}
-            onValueChange={setSelectedYear}
+            onValueChange={handleYearChange}
             disabled={!selectedMajor}
           >
             <SelectTrigger id="year">
@@ -116,11 +134,14 @@ export default function SelectCourseCard({
         </div>
       </CardContent>
       <CardFooter>
-        <Link href={`courses/modules/${selectedSemester}`}>
-          <Button className="w-full" size="lg">
-            Continue
-          </Button>
-        </Link>
+        <Button
+          className="w-full"
+          size="lg"
+          disabled={!selectedSemester}
+          onClick={handleContinue}
+        >
+          Continue
+        </Button>
       </CardFooter>
     </Card>
   );
